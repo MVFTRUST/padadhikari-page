@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>पदाधिकारियों का विवरण</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* UNIQUE BACKGROUND */
+        body {
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 200, 124, 0.13) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(131, 204, 255, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 20%),
+                linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 50%, #d5dce8 100%);
+            min-height: 100vh;
+            padding: 10px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* BACKGROUND PATTERN */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 99%, rgba(26, 115, 232, 0.05) 99%),
+                linear-gradient(0deg, transparent 99%, rgba(26, 115, 232, 0.05) 99%);
+            background-size: 30px 30px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 10px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* HEADER WITH LOGIN INLINE */
+        header {
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.95) 0%, rgba(13, 71, 161, 0.95) 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .title-text h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .title-text p {
+            font-size: 12px;
+            opacity: 0.9;
+            max-width: 300px;
+        }
+        
+        /* LOGIN SECTION IN HEADER */
+        .header-login {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .login-btn-header {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-btn-header:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #34a853 0%, #2e8b47 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(52, 168, 83, 0.3);
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        /* PHOTO GUIDELINES */
+        .photo-guidelines {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+            color: white;
+            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .photo-guidelines strong {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .photo-guidelines a {
+            color: #ffd166;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px dashed #ffd166;
+            padding: 2px 0;
+        }
+        
+        .photo-guidelines a:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+        
+        /* ADMIN PANEL */
+        .admin-panel {
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(233, 236, 239, 0.9) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #1a73e8;
+            display: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #34a853 0%, #2e8b47 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 168, 83, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #5f6368 0%, #3c4043 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #fbbc05 0%, #e6a700 100%);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ea4335 0%, #d33426 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.3);
+        }
+        
+        /* OFFICERS GRID */
+        .officers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .officers-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .officers-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .officers-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+        
+        .officer-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border: 1px solid rgba(224, 224, 224, 0.5);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .officer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .photo-container {
+            height: 130px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .officer-photo {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .officer-details {
+            padding: 12px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .officer-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 4px;
+            line-height: 1.3;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .officer-position {
+            color: #5f6368;
+            font-size: 12px;
+            margin-bottom: 3px;
+            line-height: 1.3;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .officer-department {
+            color: #34a853;
+            font-size: 11px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .contact-info {
+            font-size: 10px;
+            color: #666;
+            margin-top: 8px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 8px;
+        }
+        
+        .contact-info div {
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            word-break: break-word;
+        }
+        
+        /* CONTACT CLICKABLE STYLES */
+        .contact-clickable {
+            color: #1a73e8;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .contact-clickable:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+        
+        .contact-clickable i {
+            font-size: 9px;
+        }
+        
+        /* OFFICER CARD ACTIONS */
+        .officer-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .action-btn {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.9;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, #fbbc05 0%, #e6a700 100%);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #ea4335 0%, #d33426 100%);
+            color: white;
+        }
+        
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(233, 236, 239, 0.9) 100%);
+            border-top: 1px solid rgba(224, 224, 224, 0.5);
+            color: #5f6368;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-header h3 {
+            color: #1a73e8;
+            font-size: 18px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* FORM STYLES */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            color: #5f6368;
+            font-size: 13px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .form-control {
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+            outline: none;
+        }
+        
+        /* PHOTO PREVIEW */
+        .photo-preview-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .photo-preview {
+            width: 100px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+        }
+        
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-photo-btn {
+            background: linear-gradient(135deg, #ea4335 0%, #d33426 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .title-section {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .header-login {
+                justify-content: center;
+            }
+            
+            .admin-actions {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .admin-actions {
+                flex-direction: column;
+            }
+            
+            .admin-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* FLASHING MESSAGE */
+        .flash-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #34a853 0%, #2e8b47 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER WITH LOGIN INLINE -->
+        <header>
+            <div class="header-content">
+                <div class="title-section">
+                    <div class="logo">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="title-text">
+                        <h1>पदाधिकारियों का विवरण</h1>
+                    </div>
+                </div>
+                
+                <div class="header-login">
+                    <!-- Login Button (Shows when logged out) -->
+                    <button class="login-btn-header" onclick="showLoginModal()" id="headerLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> लॉगिन
+                    </button>
+                    
+                    <!-- Admin Badge (Shows when logged in) -->
+                    <div class="admin-badge" id="headerAdminBadge">
+                        <i class="fas fa-user-shield"></i>
+                        <span id="adminNameDisplay">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- PHOTO GUIDELINES (SHOWS AFTER LOGIN) -->
+            <div class="photo-guidelines" id="photoGuidelines">
+                <strong><i class="fas fa-camera"></i> फोटो के लिए:</strong> 
+                <div style="font-size: 13px;">
+                    <a href="https://postimages.org" target="_blank">postimages.org</a> पर अपलोड करें और 
+                    <strong>"Direct Link"</strong> कॉपी करें (पोर्ट्रेट फोटो सबसे अच्छी दिखती हैं)
+                </div>
+            </div>
+            
+            <!-- ADMIN PANEL (HIDDEN INITIALLY) -->
+            <div class="admin-panel" id="adminPanel">
+                <div class="admin-actions">
+                    <button class="admin-btn btn-primary" onclick="showAddOfficerModal()">
+                        <i class="fas fa-user-plus"></i> नया पदाधिकारी जोड़ें
+                    </button>
+                    <button class="admin-btn btn-success" onclick="exportData()">
+                        <i class="fas fa-download"></i> डेटा एक्सपोर्ट
+                    </button>
+                    <button class="admin-btn btn-secondary" onclick="showChangePasswordModal()">
+                        <i class="fas fa-key"></i> पासवर्ड बदलें
+                    </button>
+                    <button class="admin-btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> लॉगआउट
+                    </button>
+                </div>
+            </div>
+            
+            <!-- OFFICERS GRID -->
+            <h2 style="color: #1a73e8; margin: 20px 0 15px; text-align: center; font-size: 18px;">
+                <i class="fas fa-id-card"></i> पदाधिकारियों की सूची
+            </h2>
+            
+            <div class="officers-grid" id="officersContainer">
+                <!-- Officers will be loaded here -->
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2026 Majdoor Vikash Foundation. सभी अधिकार सुरक्षित</p>
+            <p style="font-size: 11px; margin-top: 8px; color: #1a73e8;">
+                <i class="fas fa-envelope"></i> 
+                <a href="mailto:mvftrust.india@gmail.com" class="contact-clickable">mvftrust.india@gmail.com</a>
+                &nbsp;|&nbsp;
+                <i class="fas fa-phone"></i> 
+                <a href="tel:+91 8503000882" class="contact-clickable">+91 98765 43210</a>
+            </p>
+        </footer>
+    </div>
+    
+    <!-- FLASH MESSAGE -->
+    <div class="flash-message" id="flashMessage">
+        <i class="fas fa-check-circle"></i>
+        <span id="flashMessageText">Success!</span>
+    </div>
+    
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> लॉगिन करें</h3>
+            </div>
+            
+            <div class="form-group">
+                <label>यूजरनेम</label>
+                <input type="text" id="loginUsername" placeholder="admin" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label>पासवर्ड</label>
+                <input type="password" id="loginPassword" placeholder="••••••" class="form-control">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="admin-btn btn-primary" onclick="login()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-sign-in-alt"></i> लॉगिन
+                </button>
+                <button class="admin-btn btn-secondary" onclick="closeLoginModal()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-times"></i> बंद करें
+                </button>
+            </div>
+            
+            <div style="margin-top: 15px; text-align: center;">
+                <small style="color: #666; font-size: 12px;">
+                    डिफ़ॉल्ट: admin / admin123
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADD OFFICER MODAL -->
+    <div class="modal" id="addOfficerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> नया पदाधिकारी जोड़ें</h3>
+            </div>
+            
+            <div class="form-group">
+                <label>फोटो URL *</label>
+                <input type="url" id="officerPhoto" placeholder="https://postimg.cc/..." class="form-control">
+                <small style="color: #666; font-size: 11px; display: block; margin-top: 5px;">
+                    <a href="https://postimages.org" target="_blank" class="contact-clickable">postimages.org</a> से Direct Link डालें
+                </small>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>नाम *</label>
+                    <input type="text" id="officerName" placeholder="पूरा नाम" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>पद *</label>
+                    <input type="text" id="officerPosition" placeholder="पद" class="form-control">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>विभाग</label>
+                    <input type="text" id="officerDepartment" placeholder="विभाग" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>ईमेल</label>
+                    <input type="email" id="officerEmail" placeholder="ईमेल" class="form-control">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>फोन नंबर</label>
+                <input type="tel" id="officerPhone" placeholder="+91 9876543210" class="form-control">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="admin-btn btn-primary" onclick="addOfficer()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-save"></i> सेव करें
+                </button>
+                <button class="admin-btn btn-secondary" onclick="closeAddOfficerModal()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-times"></i> बंद करें
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- EDIT OFFICER MODAL -->
+    <div class="modal" id="editOfficerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> पदाधिकारी संपादित करें</h3>
+            </div>
+            
+            <input type="hidden" id="editOfficerId">
+            
+            <div class="photo-preview-container">
+                <div class="photo-preview" id="photoPreview">
+                    <img id="currentPhotoPreview" src="" alt="Current Photo">
+                </div>
+                <button type="button" class="remove-photo-btn" onclick="removePhoto()">
+                    <i class="fas fa-trash"></i> फोटो हटाएं
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label>फोटो URL</label>
+                <input type="url" id="editOfficerPhoto" placeholder="https://postimg.cc/..." class="form-control">
+                <small style="color: #666; font-size: 11px; display: block; margin-top: 5px;">
+                    नई फोटो URL डालें या खाली छोड़ दें
+                </small>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>नाम *</label>
+                    <input type="text" id="editOfficerName" placeholder="पूरा नाम" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>पद *</label>
+                    <input type="text" id="editOfficerPosition" placeholder="पद" class="form-control">
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>विभाग</label>
+                    <input type="text" id="editOfficerDepartment" placeholder="विभाग" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>ईमेल</label>
+                    <input type="email" id="editOfficerEmail" placeholder="ईमेल" class="form-control">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>फोन नंबर</label>
+                <input type="tel" id="editOfficerPhone" placeholder="+91 9876543210" class="form-control">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="admin-btn btn-success" onclick="updateOfficer()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-save"></i> अपडेट करें
+                </button>
+                <button class="admin-btn btn-secondary" onclick="closeEditOfficerModal()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-times"></i> बंद करें
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CHANGE PASSWORD MODAL -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> पासवर्ड बदलें</h3>
+            </div>
+            
+            <div class="form-group">
+                <label>वर्तमान पासवर्ड</label>
+                <input type="password" id="currentPassword" placeholder="वर्तमान पासवर्ड" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label>नया पासवर्ड</label>
+                <input type="password" id="newPassword" placeholder="नया पासवर्ड" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label>पासवर्ड कन्फर्म करें</label>
+                <input type="password" id="confirmPassword" placeholder="पासवर्ड दोबारा" class="form-control">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="admin-btn btn-success" onclick="changePassword()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-save"></i> बदलें
+                </button>
+                <button class="admin-btn btn-secondary" onclick="closeChangePasswordModal()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-times"></i> बंद करें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM DELETE MODAL -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-alt"></i> पदाधिकारी हटाएं</h3>
+            </div>
+            
+            <input type="hidden" id="deleteOfficerId">
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 50px; color: #ea4335;"></i>
+                <p style="margin-top: 15px; color: #5f6368;">
+                    क्या आप वाकई इस पदाधिकारी को हटाना चाहते हैं?
+                    <br>
+                    <strong id="deleteOfficerName"></strong>
+                </p>
+                <p style="font-size: 12px; color: #ea4335; margin-top: 10px;">
+                    <i class="fas fa-info-circle"></i> यह क्रिया पूरी तरह से वापस नहीं की जा सकती
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="admin-btn btn-danger" onclick="confirmDeleteOfficer()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-trash"></i> हाँ, हटाएं
+                </button>
+                <button class="admin-btn btn-secondary" onclick="closeDeleteModal()" style="flex: 1; padding: 10px;">
+                    <i class="fas fa-times"></i> रद्द करें
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // सिस्टम कॉन्फ़िगरेशन
+        const CONFIG = {
+            DEFAULT_USERNAME: 'admin',
+            DEFAULT_PASSWORD: 'admin123',
+            STORAGE_KEY: 'mvf_trust_officers',
+            ADMIN_STORAGE_KEY: 'mvf_admin_credentials',
+            SESSION_KEY: 'admin_session'
+        };
+
+        // एप्लिकेशन स्टेट
+        let appState = {
+            isAdmin: false,
+            currentUser: '',
+            sessionTimeout: null,
+            currentEditingOfficer: null
+        };
+
+        // पेज लोड होने पर
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+        });
+
+        // ऐप इनिशियलाइज़ेशन
+        function initializeApp() {
+            checkAdminSession();
+            loadOfficers();
+        }
+
+        // इवेंट लिसनर्स
+        function setupEventListeners() {
+            // Enter key से लॉगिन
+            document.getElementById('loginPassword')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') login();
+            });
+        }
+
+        // एडमिन सेशन चेक
+        function checkAdminSession() {
+            const session = JSON.parse(localStorage.getItem(CONFIG.SESSION_KEY));
+            if (session && session.username) {
+                const now = new Date().getTime();
+                if (now - session.timestamp < 30 * 60 * 1000) { // 30 मिनट
+                    appState.isAdmin = true;
+                    appState.currentUser = session.username;
+                    updateUIAfterLogin();
+                } else {
+                    localStorage.removeItem(CONFIG.SESSION_KEY);
+                }
+            }
+        }
+
+        // लॉगिन
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            const savedUsername = localStorage.getItem('admin_username') || CONFIG.DEFAULT_USERNAME;
+            const savedPassword = localStorage.getItem('admin_password') || CONFIG.DEFAULT_PASSWORD;
+            
+            if (username === savedUsername && password === savedPassword) {
+                const session = {
+                    username: username,
+                    timestamp: new Date().getTime()
+                };
+                localStorage.setItem(CONFIG.SESSION_KEY, JSON.stringify(session));
+                
+                appState.isAdmin = true;
+                appState.currentUser = username;
+                
+                updateUIAfterLogin();
+                closeLoginModal();
+                showFlashMessage('सफलतापूर्वक लॉगिन किया गया!', 'success');
+                
+                // Reset session timeout
+                resetSessionTimeout();
+            } else {
+                showFlashMessage('गलत यूजरनेम या पासवर्ड!', 'error');
+            }
+        }
+
+        // लॉगआउट
+        function logout() {
+            localStorage.removeItem(CONFIG.SESSION_KEY);
+            appState.isAdmin = false;
+            appState.currentUser = '';
+            
+            updateUIAfterLogout();
+            showFlashMessage('सफलतापूर्वक लॉगआउट किया गया!', 'success');
+            
+            // Clear session timeout
+            if (appState.sessionTimeout) {
+                clearTimeout(appState.sessionTimeout);
+            }
+        }
+
+        // सेशन टाइमआउट रीसेट
+        function resetSessionTimeout() {
+            if (appState.sessionTimeout) {
+                clearTimeout(appState.sessionTimeout);
+            }
+            
+            appState.sessionTimeout = setTimeout(() => {
+                logout();
+                showFlashMessage('सत्र समाप्त! पुनः लॉगिन करें', 'error');
+            }, 30 * 60 * 1000); // 30 मिनट
+        }
+
+        // UI अपडेट after login
+        function updateUIAfterLogin() {
+            // Header update
+            document.getElementById('headerLoginBtn').style.display = 'none';
+            document.getElementById('headerAdminBadge').style.display = 'flex';
+            document.getElementById('adminNameDisplay').textContent = appState.currentUser;
+            
+            // Show admin panel and photo guidelines
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('photoGuidelines').style.display = 'block';
+            
+            // Reload officers to show edit/delete buttons
+            loadOfficers();
+        }
+
+        // UI अपडेट after logout
+        function updateUIAfterLogout() {
+            // Header update
+            document.getElementById('headerLoginBtn').style.display = 'flex';
+            document.getElementById('headerAdminBadge').style.display = 'none';
+            
+            // Hide admin panel and photo guidelines
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('photoGuidelines').style.display = 'none';
+            
+            // Reload officers to hide edit/delete buttons
+            loadOfficers();
+        }
+
+        // पासवर्ड बदलें
+        function changePassword() {
+            const currentPass = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+            
+            const savedPassword = localStorage.getItem('admin_password') || CONFIG.DEFAULT_PASSWORD;
+            
+            if (currentPass !== savedPassword) {
+                showFlashMessage('वर्तमान पासवर्ड गलत है!', 'error');
+                return;
+            }
+            
+            if (newPass !== confirmPass) {
+                showFlashMessage('पासवर्ड मेल नहीं खा रहे हैं!', 'error');
+                return;
+            }
+            
+            if (newPass.length < 4) {
+                showFlashMessage('पासवर्ड कम से कम 4 अक्षर का होना चाहिए!', 'error');
+                return;
+            }
+            
+            localStorage.setItem('admin_password', newPass);
+            closeChangePasswordModal();
+            showFlashMessage('पासवर्ड सफलतापूर्वक बदल दिया गया!', 'success');
+        }
+
+        // पदाधिकारी लोड
+        function loadOfficers() {
+            let officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY));
+            
+            if (!officers || officers.length === 0) {
+                officers = getDefaultOfficers();
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(officers));
+            }
+            
+            displayOfficers(officers);
+        }
+
+        // डिफ़ॉल्ट पदाधिकारी
+        function getDefaultOfficers() {
+            return [
+                {
+                    id: 1,
+                    name: "श्री रमेश शर्मा",
+                    position: "अध्यक्ष",
+                    department: "कार्यकारी समिति",
+                    photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+                    email: "chairman@mvftrust.org",
+                    phone: "+91 98765 43210"
+                },
+                {
+                    id: 2,
+                    name: "सुश्री प्रीति वर्मा",
+                    position: "सचिव",
+                    department: "प्रबंधन समिति",
+                    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+                    email: "secretary@mvftrust.org",
+                    phone: "+91 98765 43211"
+                },
+                {
+                    id: 3,
+                    name: "श्री राजेश यादव",
+                    position: "कोषाध्यक्ष",
+                    department: "वित्त विभाग",
+                    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=400&q=80",
+                    email: "treasurer@mvftrust.org",
+                    phone: "+91 98765 43212"
+                }
+            ];
+        }
+
+        // पदाधिकारी दिखाएँ
+        function displayOfficers(officers) {
+            const container = document.getElementById('officersContainer');
+            container.innerHTML = '';
+            
+            officers.forEach(officer => {
+                const firstLetter = officer.name.charAt(0).toUpperCase();
+                
+                const card = document.createElement('div');
+                card.className = 'officer-card';
+                card.innerHTML = `
+                    <div class="photo-container">
+                        <img src="${officer.photo}" 
+                             alt="${officer.name}" 
+                             class="officer-photo"
+                             loading="lazy"
+                             onerror="handleImageError(this, '${firstLetter}')">
+                    </div>
+                    <div class="officer-details">
+                        <div class="officer-name">${officer.name}</div>
+                        <div class="officer-position">${officer.position}</div>
+                        <div class="officer-department">${officer.department}</div>
+                        
+                        <div class="contact-info">
+                            ${officer.email ? `
+                            <div>
+                                <i class="fas fa-envelope"></i> 
+                                <a href="mailto:${officer.email}" class="contact-clickable">${officer.email}</a>
+                            </div>` : ''}
+                            ${officer.phone ? `
+                            <div>
+                                <i class="fas fa-phone"></i> 
+                                <a href="tel:${officer.phone}" class="contact-clickable">${officer.phone}</a>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                    ${appState.isAdmin ? `
+                    <div class="officer-actions">
+                        <button class="action-btn edit-btn" onclick="editOfficer(${officer.id})" title="संपादित करें">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="showDeleteModal(${officer.id}, '${officer.name}')" title="हटाएं">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>` : ''}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // इमेज एरर हैंडलर
+        function handleImageError(img, firstLetter) {
+            const parent = img.parentElement;
+            const name = img.alt || 'Officer';
+            
+            img.style.display = 'none';
+            
+            const svgCode = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 300 400">
+                    <defs>
+                        <linearGradient id="grad${firstLetter}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grad${firstLetter})"/>
+                    <text x="50%" y="50%" font-family="Arial" font-size="120" fill="white" 
+                          text-anchor="middle" dy=".3em">${firstLetter}</text>
+                </svg>
+            `;
+            
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgCode, 'image/svg+xml');
+            const svgElement = svgDoc.documentElement;
+            
+            parent.innerHTML = '';
+            parent.appendChild(svgElement);
+        }
+
+        // पदाधिकारी संपादित करने के लिए मोडल दिखाएं
+        function editOfficer(id) {
+            if (!appState.isAdmin) {
+                showFlashMessage('केवल एडमिन पदाधिकारी संपादित कर सकते हैं!', 'error');
+                return;
+            }
+            
+            const officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
+            const officer = officers.find(o => o.id === id);
+            
+            if (!officer) {
+                showFlashMessage('पदाधिकारी नहीं मिला!', 'error');
+                return;
+            }
+            
+            appState.currentEditingOfficer = officer;
+            
+            // फॉर्म भरें
+            document.getElementById('editOfficerId').value = officer.id;
+            document.getElementById('editOfficerName').value = officer.name;
+            document.getElementById('editOfficerPosition').value = officer.position;
+            document.getElementById('editOfficerDepartment').value = officer.department;
+            document.getElementById('editOfficerEmail').value = officer.email;
+            document.getElementById('editOfficerPhone').value = officer.phone;
+            document.getElementById('editOfficerPhoto').value = '';
+            
+            // फोटो प्रिव्यू सेट करें
+            const previewImg = document.getElementById('currentPhotoPreview');
+            previewImg.src = officer.photo;
+            previewImg.alt = officer.name;
+            
+            // फोटो प्रिव्यू के लिए एरर हैंडलर
+            previewImg.onerror = function() {
+                this.style.display = 'none';
+                const parent = this.parentElement;
+                const firstLetter = officer.name.charAt(0).toUpperCase();
+                
+                const svgCode = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 300 400">
+                        <defs>
+                            <linearGradient id="grad${firstLetter}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad${firstLetter})"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="120" fill="white" 
+                              text-anchor="middle" dy=".3em">${firstLetter}</text>
+                    </svg>
+                `;
+                
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgCode, 'image/svg+xml');
+                const svgElement = svgDoc.documentElement;
+                
+                parent.innerHTML = '';
+                parent.appendChild(svgElement);
+            };
+            
+            document.getElementById('editOfficerModal').style.display = 'flex';
+        }
+
+        // फोटो हटाएं (संपादन के दौरान)
+        function removePhoto() {
+            appState.currentEditingOfficer.photo = '';
+            document.getElementById('editOfficerPhoto').value = '';
+            
+            // डिफ़ॉल्ट अवतार दिखाएं
+            const previewContainer = document.getElementById('photoPreview');
+            const officer = appState.currentEditingOfficer;
+            const firstLetter = officer.name.charAt(0).toUpperCase();
+            
+            const svgCode = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 300 400">
+                    <defs>
+                        <linearGradient id="grad${firstLetter}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grad${firstLetter})"/>
+                    <text x="50%" y="50%" font-family="Arial" font-size="120" fill="white" 
+                          text-anchor="middle" dy=".3em">${firstLetter}</text>
+                </svg>
+            `;
+            
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgCode, 'image/svg+xml');
+            const svgElement = svgDoc.documentElement;
+            
+            previewContainer.innerHTML = '';
+            previewContainer.appendChild(svgElement);
+            
+            showFlashMessage('फोटो हटा दी गई है', 'success');
+        }
+
+        // पदाधिकारी अपडेट करें
+        function updateOfficer() {
+            if (!appState.isAdmin) {
+                showFlashMessage('केवल एडमिन पदाधिकारी अपडेट कर सकते हैं!', 'error');
+                return;
+            }
+            
+            const id = parseInt(document.getElementById('editOfficerId').value);
+            const updatedOfficer = {
+                id: id,
+                name: document.getElementById('editOfficerName').value.trim(),
+                position: document.getElementById('editOfficerPosition').value.trim(),
+                department: document.getElementById('editOfficerDepartment').value.trim() || 'सामान्य समिति',
+                email: document.getElementById('editOfficerEmail').value.trim(),
+                phone: document.getElementById('editOfficerPhone').value.trim()
+            };
+            
+            // नई फोटो URL या मौजूदा फोटो
+            const newPhoto = document.getElementById('editOfficerPhoto').value.trim();
+            if (newPhoto) {
+                updatedOfficer.photo = newPhoto;
+            } else if (appState.currentEditingOfficer) {
+                updatedOfficer.photo = appState.currentEditingOfficer.photo;
+            }
+            
+            if (!updatedOfficer.name || !updatedOfficer.position) {
+                showFlashMessage('कृपया नाम और पद दर्ज करें!', 'error');
+                return;
+            }
+            
+            let officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
+            const index = officers.findIndex(o => o.id === id);
+            
+            if (index !== -1) {
+                officers[index] = updatedOfficer;
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(officers));
+                
+                displayOfficers(officers);
+                closeEditOfficerModal();
+                showFlashMessage('पदाधिकारी सफलतापूर्वक अपडेट किया गया!', 'success');
+            } else {
+                showFlashMessage('पदाधिकारी नहीं मिला!', 'error');
+            }
+        }
+
+        // नया पदाधिकारी
+        function addOfficer() {
+            if (!appState.isAdmin) {
+                showFlashMessage('केवल एडमिन नया पदाधिकारी जोड़ सकते हैं!', 'error');
+                return;
+            }
+            
+            const officer = {
+                id: Date.now(),
+                name: document.getElementById('officerName').value.trim(),
+                position: document.getElementById('officerPosition').value.trim(),
+                department: document.getElementById('officerDepartment').value.trim() || 'सामान्य समिति',
+                photo: document.getElementById('officerPhoto').value.trim(),
+                email: document.getElementById('officerEmail').value.trim(),
+                phone: document.getElementById('officerPhone').value.trim()
+            };
+            
+            if (!officer.name || !officer.position || !officer.photo) {
+                showFlashMessage('कृपया नाम, पद और फोटो URL दर्ज करें!', 'error');
+                return;
+            }
+            
+            if (!officer.photo.startsWith('http')) {
+                showFlashMessage('कृपया सही फोटो URL दर्ज करें!', 'error');
+                return;
+            }
+            
+            let officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
+            officers.push(officer);
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(officers));
+            
+            displayOfficers(officers);
+            closeAddOfficerModal();
+            showFlashMessage('पदाधिकारी सफलतापूर्वक जोड़ा गया!', 'success');
+        }
+
+        // डिलीट मोडल दिखाएं
+        function showDeleteModal(id, name) {
+            if (!appState.isAdmin) {
+                showFlashMessage('केवल एडमिन पदाधिकारी हटा सकते हैं!', 'error');
+                return;
+            }
+            
+            document.getElementById('deleteOfficerId').value = id;
+            document.getElementById('deleteOfficerName').textContent = name;
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        }
+
+        // पदाधिकारी डिलीट करें
+        function confirmDeleteOfficer() {
+            const id = parseInt(document.getElementById('deleteOfficerId').value);
+            
+            let officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
+            const initialLength = officers.length;
+            officers = officers.filter(o => o.id !== id);
+            
+            if (officers.length < initialLength) {
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(officers));
+                displayOfficers(officers);
+                closeDeleteModal();
+                showFlashMessage('पदाधिकारी सफलतापूर्वक हटाया गया!', 'success');
+            } else {
+                showFlashMessage('पदाधिकारी नहीं मिला!', 'error');
+            }
+        }
+
+        // डेटा एक्सपोर्ट
+        function exportData() {
+            if (!appState.isAdmin) {
+                showFlashMessage('केवल एडमिन डेटा एक्सपोर्ट कर सकते हैं!', 'error');
+                return;
+            }
+            
+            const officers = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY)) || [];
+            const dataStr = JSON.stringify(officers, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            
+            const today = new Date().toISOString().split('T')[0];
+            const link = document.createElement('a');
+            link.setAttribute('href', dataUri);
+            link.setAttribute('download', `mvf_officers_${today}.json`);
+            link.click();
+            
+            showFlashMessage('डेटा सफलतापूर्वक एक्सपोर्ट किया गया!', 'success');
+        }
+
+        // UI Helper Functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showAddOfficerModal() {
+            document.getElementById('addOfficerModal').style.display = 'flex';
+        }
+
+        function closeAddOfficerModal() {
+            document.getElementById('addOfficerModal').style.display = 'none';
+            document.getElementById('officerPhoto').value = '';
+            document.getElementById('officerName').value = '';
+            document.getElementById('officerPosition').value = '';
+            document.getElementById('officerDepartment').value = '';
+            document.getElementById('officerEmail').value = '';
+            document.getElementById('officerPhone').value = '';
+        }
+
+        function closeEditOfficerModal() {
+            document.getElementById('editOfficerModal').style.display = 'none';
+            document.getElementById('editOfficerId').value = '';
+            document.getElementById('editOfficerName').value = '';
+            document.getElementById('editOfficerPosition').value = '';
+            document.getElementById('editOfficerDepartment').value = '';
+            document.getElementById('editOfficerEmail').value = '';
+            document.getElementById('editOfficerPhone').value = '';
+            document.getElementById('editOfficerPhoto').value = '';
+            appState.currentEditingOfficer = null;
+        }
+
+        function showChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            document.getElementById('deleteOfficerId').value = '';
+            document.getElementById('deleteOfficerName').textContent = '';
+        }
+
+        function showFlashMessage(text, type) {
+            const flashMsg = document.getElementById('flashMessage');
+            const flashText = document.getElementById('flashMessageText');
+            
+            flashText.textContent = text;
+            flashMsg.style.display = 'flex';
+            flashMsg.style.background = type === 'success' 
+                ? 'linear-gradient(135deg, #34a853 0%, #2e8b47 100%)'
+                : 'linear-gradient(135deg, #ea4335 0%, #d33426 100%)';
+            
+            setTimeout(() => {
+                flashMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
